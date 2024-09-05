@@ -1,3 +1,4 @@
+#!/usr/bin/env node 
 import {createRequire} from "node:module";
 var __create = Object.create;
 var __defProp = Object.defineProperty;
@@ -21748,14 +21749,14 @@ export default [
   getPrettierJson: () => {
     return `
 {
-  "printWidth": 80, // \u884C\u5BBD
-  "tabWidth": 2, // Tab\u5BBD\u5EA6
-  "useTabs": false, // \u662F\u5426\u4F7F\u7528\u5236\u8868\u7B26
-  "semi": true, // \u662F\u5426\u4F7F\u7528\u5206\u53F7
-  "singleQuote": true, // \u4F7F\u7528\u5355\u5F15\u53F7
-  "trailingComma": "all", // \u5C3E\u968F\u9017\u53F7
-  "bracketSpacing": true, // \u5BF9\u8C61\u82B1\u62EC\u53F7\u4E4B\u95F4\u662F\u5426\u6709\u7A7A\u683C
-  "jsxBracketSameLine": false // JSX\u6807\u7B7E\u95ED\u5408\u82B1\u62EC\u53F7\u662F\u5426\u5728\u540C\u4E00\u884C
+  "printWidth": 80,
+  "tabWidth": 2,
+  "useTabs": false,
+  "semi": true,
+  "singleQuote": false,
+  "trailingComma": "all",
+  "bracketSpacing": true,
+  "jsxBracketSameLine": false
 }
     `;
   },
@@ -21794,17 +21795,17 @@ async function handleCommand(params) {
   if (params.init_eslint && params.init_prettier) {
     await writeFile(prettierPath, files_default.getPrettierJson());
     await writeFile(eslintPath, files_default.getEslintAndPrettierJson());
-    await execSync("pnpm i -D typescript-eslint globals eslint @eslint/js eslint-config-prettier eslint-plugin-prettier", {
+    await execSync("bun i -D typescript-eslint globals eslint @eslint/js eslint-config-prettier eslint-plugin-prettier", {
       stdio: "inherit"
     });
   } else if (params.init_eslint) {
     await writeFile(eslintPath, files_default.getEslintJson());
-    await execSync("pnpm i -D typescript-eslint globals eslint @eslint/js", {
+    await execSync("bun i -D typescript-eslint globals eslint @eslint/js", {
       stdio: "inherit"
     });
   } else if (params.init_prettier) {
     await writeFile(prettierPath, files_default.getPrettierJson());
-    await execSync("pnpm i -D eslint-config-prettier eslint-plugin-prettier", {
+    await execSync("bun i -D eslint-config-prettier eslint-plugin-prettier", {
       stdio: "inherit"
     });
   }
@@ -24017,9 +24018,10 @@ var inquirer = {
 var esm_default12 = inquirer;
 // package.json
 var package_default = {
-  name: "bun-pnpm-cli",
+  name: "create-bun-cli",
   module: "index.ts",
   type: "module",
+  version: "1.0.0",
   devDependencies: {
     "@eslint/js": "^9.9.1",
     "@types/bun": "latest",
@@ -24039,7 +24041,14 @@ var package_default = {
   },
   scripts: {
     dev: "node --loader ts-node/esm index.ts",
-    build: "bun build index.ts --target=node --outdir=dist"
+    build: "bun build index.ts --target=node --outdir=dist && sleep 2 && echo #!/usr/bin/env node | cat - dist/index.js > temp && mv temp dist/index.js"
+  },
+  bin: {
+    "bun/cli": "./dist/index.js"
+  },
+  repository: {
+    type: "git",
+    url: "git+https://github.com/1596944197/-bun-cli.git"
   }
 };
 

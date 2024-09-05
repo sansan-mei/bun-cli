@@ -2,7 +2,7 @@
   "name": "create-bun-cli",
   "module": "index.ts",
   "type": "module",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "devDependencies": {
     "@eslint/js": "^9.9.1",
     "@types/bun": "latest",
@@ -22,7 +22,7 @@
   },
   "scripts": {
     "dev": "node --loader ts-node/esm index.ts",
-    "build": "bun build index.ts --target=node --outdir=dist"
+    "build": "bun build index.ts --target=node --outdir=dist && sleep 2 && echo #!/usr/bin/env node | cat - dist/index.js > temp && mv temp dist/index.js"
   },
   "bin": {
     "bun/cli": "./dist/index.js"
