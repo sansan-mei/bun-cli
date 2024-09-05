@@ -25,5 +25,9 @@
   },
   "bin": {
     "bun/cli": "./dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/1596944197/-bun-cli.git"
   }
 }
