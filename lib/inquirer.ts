@@ -1,4 +1,5 @@
 import inquirer from "inquirer";
+import packageJson from "../package.json" assert { type: "json" };
 
 export default {
   // 询问git账号信息
@@ -7,6 +8,7 @@ export default {
       {
         name: "package_name",
         type: "input",
+        default: packageJson.name,
         message: "请输入仓库名",
         validate: function (value: string) {
           const valid =
