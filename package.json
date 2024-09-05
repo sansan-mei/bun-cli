@@ -20,6 +20,10 @@
     "inquirer": "^10.2.0"
   },
   "scripts": {
-    "dev": "node --loader ts-node/esm index.ts"
+    "dev": "node --loader ts-node/esm index.ts",
+    "build": "bun build index.ts --target=node --outdir=dist"
+  },
+  "bin": {
+    "bun/cli": "./dist/index.js"
   }
 }

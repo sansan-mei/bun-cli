@@ -24,19 +24,19 @@ export async function handleCommand<
     await writeFile(prettierPath, files.getPrettierJson());
     await writeFile(eslintPath, files.getEslintAndPrettierJson());
     await execSync(
-      "pnpm i -D typescript-eslint globals eslint @eslint/js eslint-config-prettier eslint-plugin-prettier",
+      "bun i -D typescript-eslint globals eslint @eslint/js eslint-config-prettier eslint-plugin-prettier",
       {
         stdio: "inherit",
-      }
+      },
     );
   } else if (params.init_eslint) {
     await writeFile(eslintPath, files.getEslintJson());
-    await execSync("pnpm i -D typescript-eslint globals eslint @eslint/js", {
+    await execSync("bun i -D typescript-eslint globals eslint @eslint/js", {
       stdio: "inherit",
     });
   } else if (params.init_prettier) {
     await writeFile(prettierPath, files.getPrettierJson());
-    await execSync("pnpm i -D eslint-config-prettier eslint-plugin-prettier", {
+    await execSync("bun i -D eslint-config-prettier eslint-plugin-prettier", {
       stdio: "inherit",
     });
   }
