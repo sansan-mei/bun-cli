@@ -16,6 +16,17 @@ export async function handleCommand<
     ...packageJson.scripts,
     dev: "node --loader ts-node/esm index.ts",
   };
+  packageJson.imports = {
+    "#*": "./*",
+  };
+  const tsConfigJson = JSON.parse(await readFile("tsconfig.json", "utf-8"));
+  tsConfigJson.compilerOptions = {
+    ...tsConfigJson.compilerOptions,
+    baseUrl: ".",
+    paths: {
+      "#src/*": ["./src/*"],
+    },
+  };
   await writeFile("package.json", JSON.stringify(packageJson, null, 2));
   if (params.init_git) {
     execSync("git init");
