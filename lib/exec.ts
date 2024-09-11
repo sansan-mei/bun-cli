@@ -17,6 +17,7 @@ export async function handleCommand<
     dev: "node --loader ts-node/esm index.ts",
   };
   packageJson.imports = {
+    ...packageJson.imports,
     "#*": "./*",
   };
   const tsConfigJson = JSON.parse(await readFile("tsconfig.json", "utf-8"));
