@@ -56,4 +56,10 @@ export default [
 ];
     `;
   },
+  getBunConfigJson: () => {
+    return `
+[install]
+registry = "https://registry.npmmirror.com/"
+    `;
+  },
 };

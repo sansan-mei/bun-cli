@@ -21775,6 +21775,12 @@ export default [
   eslintPluginPrettierRecommended,
 ];
     `;
+  },
+  getBunConfigJson: () => {
+    return `
+[install]
+registry = "https://registry.npmmirror.com/"
+    `;
   }
 };
 
@@ -21782,11 +21788,29 @@ export default [
 async function handleCommand(params) {
   execSync("bun init -y", { stdio: "inherit" });
   execSync("bun i -D ts-node", { stdio: "inherit" });
+  if (!files_default.directoryExists("bunfig.toml")) {
+    await writeFile("bunfig.toml", files_default.getBunConfigJson());
+  }
+  if (!files_default.directoryExists("src")) {
+    execSync("mkdir src");
+  }
   const packageJson = JSON.parse(await readFile("package.json", "utf-8"));
   packageJson.name = params.package_name;
   packageJson.scripts = {
     ...packageJson.scripts,
     dev: "node --loader ts-node/esm index.ts"
+  };
+  packageJson.imports = {
+    ...packageJson.imports,
+    "#*": "./*"
+  };
+  const tsConfigJson = JSON.parse(await readFile("tsconfig.json", "utf-8"));
+  tsConfigJson.compilerOptions = {
+    ...tsConfigJson.compilerOptions,
+    baseUrl: ".",
+    paths: {
+      "#src/*": ["./src/*"]
+    }
   };
   await writeFile("package.json", JSON.stringify(packageJson, null, 2));
   if (params.init_git) {
@@ -24021,7 +24045,7 @@ var package_default = {
   name: "create-bun-cli",
   module: "index.ts",
   type: "module",
-  version: "1.0.0",
+  version: "1.0.3",
   devDependencies: {
     "@eslint/js": "^9.9.1",
     "@types/bun": "latest",
@@ -24041,7 +24065,7 @@ var package_default = {
   },
   scripts: {
     dev: "node --loader ts-node/esm index.ts",
-    build: "bun build index.ts --target=node --outdir=dist && sleep 2 && echo #!/usr/bin/env node | cat - dist/index.js > temp && mv temp dist/index.js"
+    build: "bun run build.ts"
   },
   bin: {
     "bun/cli": "./dist/index.js"
@@ -24096,13 +24120,9 @@ var checkInstallation = function(command) {
   }
 };
 var isBunInstalled = checkInstallation("bun");
-var isPnpmInstalled = checkInstallation("pnpm");
 var isGitInstalled = checkInstallation("git");
 if (!isBunInstalled) {
   throw new Error("bun is not installed");
-}
-if (!isPnpmInstalled) {
-  throw new Error("pnpm is not installed");
 }
 if (!isGitInstalled) {
   throw new Error("git is not installed");

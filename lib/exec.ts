@@ -10,6 +10,15 @@ export async function handleCommand<
 >(params: T) {
   execSync("bun init -y", { stdio: "inherit" });
   execSync("bun i -D ts-node", { stdio: "inherit" });
+
+  if (!files.directoryExists("bunfig.toml")) {
+    await writeFile("bunfig.toml", files.getBunConfigJson());
+  }
+  // 判断一下有没有src目录，没有就创建
+  if (!files.directoryExists("src")) {
+    execSync("mkdir src");
+  }
+
   const packageJson = JSON.parse(await readFile("package.json", "utf-8"));
   packageJson.name = params.package_name;
   packageJson.scripts = {
@@ -36,20 +45,26 @@ export async function handleCommand<
     await writeFile(prettierPath, files.getPrettierJson());
     await writeFile(eslintPath, files.getEslintAndPrettierJson());
     await execSync(
-      "bun i -D typescript-eslint globals eslint @eslint/js eslint-config-prettier eslint-plugin-prettier",
+      "bun i -D typescript-eslint@8 globals@15 eslint@9 @eslint/js@9 eslint-config-prettier@9 eslint-plugin-prettier@5",
       {
         stdio: "inherit",
       },
     );
   } else if (params.init_eslint) {
     await writeFile(eslintPath, files.getEslintJson());
-    await execSync("bun i -D typescript-eslint globals eslint @eslint/js", {
-      stdio: "inherit",
-    });
+    await execSync(
+      "bun i -D typescript-eslint@8 globals@15 eslint@9 @eslint/js@9",
+      {
+        stdio: "inherit",
+      },
+    );
   } else if (params.init_prettier) {
     await writeFile(prettierPath, files.getPrettierJson());
-    await execSync("bun i -D eslint-config-prettier eslint-plugin-prettier", {
-      stdio: "inherit",
-    });
+    await execSync(
+      "bun i -D eslint-config-prettier@9 eslint-plugin-prettier@5",
+      {
+        stdio: "inherit",
+      },
+    );
   }
 }
