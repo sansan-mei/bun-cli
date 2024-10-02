@@ -1,5 +1,25 @@
 import inquirer from "inquirer";
-import packageJson from "../package.json" assert { type: "json" };
+import fs from "node:fs";
+import path from "node:path";
+
+function getDefaultPackName() {
+  // 读取当前目录的名字或者当前文件夹内package.json的名字
+  const currentDirName = path.basename(process.cwd());
+  let packageName;
+  try {
+    const packageJsonPath = path.join(process.cwd(), "package.json");
+    if (fs.existsSync(packageJsonPath)) {
+      const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
+      packageName = packageJson.name;
+    } else {
+      packageName = currentDirName;
+    }
+  } catch {
+    packageName = currentDirName;
+  }
+
+  return packageName;
+}
 
 export default {
   // 询问git账号信息
@@ -8,7 +28,7 @@ export default {
       {
         name: "package_name",
         type: "input",
-        default: packageJson.name,
+        default: getDefaultPackName(),
         message: "请输入仓库名",
         validate: function (value: string) {
           const valid =

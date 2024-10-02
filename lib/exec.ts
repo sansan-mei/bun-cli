@@ -1,5 +1,6 @@
 import { execSync } from "child_process";
 import { readFile, writeFile } from "node:fs/promises";
+import stripJsonComments from "strip-json-comments";
 import files from "./files";
 import type inquirer from "./inquirer";
 
@@ -29,7 +30,9 @@ export async function handleCommand<
     ...packageJson.imports,
     "#*": "./*",
   };
-  const tsConfigJson = JSON.parse(await readFile("tsconfig.json", "utf-8"));
+  const tsConfigJson = JSON.parse(
+    stripJsonComments(await readFile("tsconfig.json", "utf-8")),
+  );
   tsConfigJson.compilerOptions = {
     ...tsConfigJson.compilerOptions,
     baseUrl: ".",

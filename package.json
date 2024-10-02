@@ -18,7 +18,8 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "inquirer": "^10.2.0"
+    "inquirer": "^10.2.0",
+    "strip-json-comments": "^5.0.1"
   },
   "scripts": {
     "dev": "node --loader ts-node/esm index.ts",
