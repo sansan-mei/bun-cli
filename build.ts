@@ -7,5 +7,7 @@ await Bun.build({
 });
 
 execSync(
-  `sleep 2 && echo #!/usr/bin/env node | cat - dist/index.js > temp && mv temp dist/index.js`,
+  `(echo #!/usr/bin/env node | cat - dist/index.js > temp) && sleep 1 && mv temp dist/index.js `,
 );
+
+console.log("Build complete");
