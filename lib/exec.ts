@@ -9,6 +9,11 @@ const prettierPath = ".prettierrc.json";
 export async function handleCommand<
   T extends Awaited<ReturnType<typeof inquirer.ask>>,
 >(params: T) {
+  if (params.is_new_dir) {
+    execSync(`mkdir ${params.package_name}`);
+    process.chdir(params.package_name);
+  }
+
   if (!files.directoryExists("bunfig.toml")) {
     await writeFile("bunfig.toml", files.getBunConfigJson());
   }

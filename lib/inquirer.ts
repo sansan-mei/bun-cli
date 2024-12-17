@@ -25,6 +25,13 @@ export default {
   // 询问git账号信息
   ask: () => {
     return inquirer.prompt([
+      // 第一问是当前目录创建还是新目录创建
+      {
+        name: "is_new_dir",
+        type: "confirm",
+        message: "是否新建目录创建?",
+        default: false,
+      },
       {
         name: "package_name",
         type: "input",
