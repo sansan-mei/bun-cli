@@ -15,6 +15,10 @@ export async function handleCommand<
   if (!files.directoryExists("bunfig.toml")) {
     await writeFile("bunfig.toml", files.getBunConfigJson());
   }
+  // 判断一下有没有.editorconfig文件，没有就创建
+  if (!files.directoryExists(".editorconfig")) {
+    await writeFile(".editorconfig", files.getEditorConfig());
+  }
   // 判断一下有没有src目录，没有就创建
   if (!files.directoryExists("src")) {
     execSync("mkdir src");
