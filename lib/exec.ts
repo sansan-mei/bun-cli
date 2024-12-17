@@ -9,9 +9,6 @@ const prettierPath = ".prettierrc.json";
 export async function handleCommand<
   T extends Awaited<ReturnType<typeof inquirer.ask>>,
 >(params: T) {
-  execSync("bun init -y", { stdio: "inherit" });
-  execSync("bun i -D ts-node", { stdio: "inherit" });
-
   if (!files.directoryExists("bunfig.toml")) {
     await writeFile("bunfig.toml", files.getBunConfigJson());
   }
@@ -19,6 +16,9 @@ export async function handleCommand<
   if (!files.directoryExists(".editorconfig")) {
     await writeFile(".editorconfig", files.getEditorConfig());
   }
+
+  execSync("bun init -y", { stdio: "inherit" });
+  execSync("bun i -D ts-node", { stdio: "inherit" });
   // 判断一下有没有src目录，没有就创建
   if (!files.directoryExists("src")) {
     execSync("mkdir src");
