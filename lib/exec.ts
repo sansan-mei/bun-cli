@@ -33,7 +33,9 @@ export async function handleCommand<
   packageJson.name = params.package_name;
   packageJson.scripts = {
     ...packageJson.scripts,
-    dev: "node --loader ts-node/esm index.ts",
+    dev: "bun run index.ts",
+    build: "bun build index.ts --target=bun --outfile=dist/index.js",
+    "dev:node": "node --loader ts-node/esm index.ts",
   };
   packageJson.imports = {
     ...packageJson.imports,
