@@ -23,7 +23,6 @@ export default [
   pluginJs.configs.recommended,
   ...tsEslint.configs.recommended,
 ];
-
     `;
   },
   getPrettierJson: () => {
@@ -106,6 +105,6 @@ indent_size = 2
 declare type AnyArray = Array<any>;
 
 declare type AnyObject = Record<string, any>;
-    `;
+   `;
   },
 };

@@ -67,7 +67,7 @@ export async function handleCommand<
     paths: {
       "#src/*": ["./src/*"],
     },
-    types: [...(types ?? []), "global.d.ts"],
+    types: [...(types ?? []), "./global.d.ts"],
   };
   await writeFile("global.d.ts", files.getDefaultDts());
 
