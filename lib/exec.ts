@@ -40,6 +40,7 @@ export async function handleCommand<
 
   execSync("bun init -y", { stdio: "inherit" });
   execSync("bun i -D ts-node", { stdio: "inherit" });
+  execSync("bun i -D @types/node", { stdio: "inherit" });
   // 判断一下有没有src目录，没有就创建
   if (!files.directoryExists("src")) {
     execSync("mkdir src");
@@ -67,7 +68,7 @@ export async function handleCommand<
     paths: {
       "#src/*": ["./src/*"],
     },
-    types: [...(types ?? []), "./global.d.ts"],
+    types: [...(types ?? []), "./global.d.ts", "node"],
   };
   await writeFile("global.d.ts", files.getDefaultDts());
 
