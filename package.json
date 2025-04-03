@@ -22,7 +22,8 @@
     "strip-json-comments": "^5.0.1"
   },
   "scripts": {
-    "dev": "node --loader ts-node/esm index.ts",
+    "dev": "bun run index.ts",
+    "dev:node": "node --loader ts-node/esm index.ts",
     "build": "bun run build.ts"
   },
   "bin": {

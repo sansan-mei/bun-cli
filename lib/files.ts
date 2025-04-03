@@ -100,4 +100,12 @@ indent_style = space
 indent_size = 2
     `;
   },
+  getDefaultDts: () => {
+    return `
+/* eslint-disable @typescript-eslint/no-explicit-any */
+declare type AnyArray = Array<any>;
+
+declare type AnyObject = Record<string, any>;
+    `;
+  },
 };

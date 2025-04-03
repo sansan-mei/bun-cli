@@ -1,11 +1,27 @@
 import { execSync } from "child_process";
 import { readFile, writeFile } from "node:fs/promises";
 import stripJsonComments from "strip-json-comments";
+import type { CompilerOptions } from "typescript";
 import files from "./files";
 import type inquirer from "./inquirer";
 
 const eslintPath = "eslint.config.js";
 const prettierPath = ".prettierrc.json";
+
+interface TsConfigJson {
+  compilerOptions?: CompilerOptions;
+  include?: string[];
+  exclude?: string[];
+  references?: Array<{ path: string }>;
+  extends?: string;
+  [key: string]:
+    | string
+    | string[]
+    | CompilerOptions
+    | Array<{ path: string }>
+    | undefined;
+}
+
 export async function handleCommand<
   T extends Awaited<ReturnType<typeof inquirer.ask>>,
 >(params: T) {
@@ -41,17 +57,28 @@ export async function handleCommand<
     ...packageJson.imports,
     "#*": "./*",
   };
-  const tsConfigJson = JSON.parse(
+  const tsConfigJson: TsConfigJson = JSON.parse(
     stripJsonComments(await readFile("tsconfig.json", "utf-8")),
   );
+  const types = tsConfigJson.compilerOptions?.types;
   tsConfigJson.compilerOptions = {
     ...tsConfigJson.compilerOptions,
     baseUrl: ".",
     paths: {
       "#src/*": ["./src/*"],
     },
+    types: [...(types ?? []), "global.d.ts"],
   };
+  await writeFile("global.d.ts", files.getDefaultDts());
+
   await writeFile("package.json", JSON.stringify(packageJson, null, 2));
+
+  await writeFile("tsconfig.json", JSON.stringify(tsConfigJson, null, 2));
+
+  if (!files.directoryExists(".editorconfig")) {
+    await writeFile(".editorconfig", files.getEditorConfig());
+  }
+
   if (params.init_git) {
     execSync("git init");
   }
